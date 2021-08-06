@@ -6,5 +6,3 @@ dist
 coverage
 
 .eslintrc.js
-
-serviceWorker.ts
