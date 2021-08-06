@@ -1858,6 +1858,11 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
 
+"@types/matter-js@^0.17.5":
+  version "0.17.5"
+  resolved "https://registry.yarnpkg.com/@types/matter-js/-/matter-js-0.17.5.tgz#b7ddd422cf5980f01531dfed60fc11682a1adbb9"
+  integrity sha512-s4j6htb+NZNQyo2jP96uZ93aPn0fCw0RP1YnEDmKkIKpOVxvNWdEEPPj3U+9xezp3eQChvWOwHcR815rEBWexA==
+
 "@types/minimatch@*":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
