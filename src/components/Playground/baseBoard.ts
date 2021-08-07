@@ -1,5 +1,5 @@
 import { Bodies } from "matter-js";
-import { MID_POINT_X, BASE_BOARD_ID } from "./utils/common";
+import { MID_POINT_X } from "./utils/common";
 import baseTriangle from "./baseTriangle";
 
 export const BOARD_HEIGHT = 10;
@@ -13,7 +13,7 @@ const baseBoard = Bodies.rectangle(
   BOARD_WIDTH,
   BOARD_HEIGHT,
   {
-    id: BASE_BOARD_ID,
+    id: 3,
     inverseInertia: Infinity,
   }
 );

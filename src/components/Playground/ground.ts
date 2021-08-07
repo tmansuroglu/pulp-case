@@ -1,10 +1,5 @@
 import { Bodies } from "matter-js";
-import {
-  MID_POINT_X,
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-  GROUND_ID,
-} from "./utils/common";
+import { MID_POINT_X, SCREEN_HEIGHT, SCREEN_WIDTH } from "./utils/common";
 
 const GROUND_WIDTH = SCREEN_WIDTH;
 export const GROUND_HEIGHT = 10;
@@ -18,7 +13,7 @@ const ground = Bodies.rectangle(
   GROUND_HEIGHT,
   {
     isStatic: true,
-    id: GROUND_ID,
+    id: 1,
   }
 );
 

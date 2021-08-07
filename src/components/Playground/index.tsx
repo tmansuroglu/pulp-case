@@ -1,6 +1,6 @@
 import React, { FC, ReactElement, useEffect, useRef } from "react";
 import "./index.css";
-import { Engine, Render, Runner, Composite, Events } from "matter-js";
+import { Engine, Render, Runner, Composite, Events, SAT } from "matter-js";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "./utils/common";
 import baseBoard from "./baseBoard";
 import ground from "./ground";
@@ -47,9 +47,11 @@ const Playground: FC = (): ReactElement => {
     Runner.run(runner, engine);
 
     // listen to board angle change
-    Events.on(engine, "collisionEnd", (e) => {
-      // console.log(baseBoard.angle);
-      console.log(e);
+    Events.on(engine, "collisionStart", () => {
+      const didCircleCollide = SAT.collides(baseBoard, circle).collided;
+      if (didCircleCollide) {
+        circle.friction = 1;
+      }
     });
 
     return () => {
