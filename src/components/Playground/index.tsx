@@ -22,6 +22,11 @@ const Playground: FC = (): ReactElement => {
     const engine = Engine.create();
     const { world } = engine;
 
+    // create runner
+    const runner = Runner.create();
+    const createdRunner = Runner.run(runner, engine);
+    createdRunner.enabled = true;
+
     const render = Render.create({
       element: playgroundRef.current,
       engine,
@@ -32,10 +37,6 @@ const Playground: FC = (): ReactElement => {
     });
 
     Render.run(render);
-
-    // create runner
-    const runner = Runner.create();
-    Runner.run(runner, engine);
 
     const randomRightSideObject = createRandomObject("right");
 
@@ -73,6 +74,7 @@ const Playground: FC = (): ReactElement => {
 
       if (catapultAngle > 30 || Math.abs(rightSideKgm - leftSideKgm) >= 20) {
         setIsGameOver(true);
+        createdRunner.enabled = false;
         console.log(isGameOver);
       }
     };
@@ -80,9 +82,11 @@ const Playground: FC = (): ReactElement => {
 
     return () => {
       render.canvas.remove();
+      createdRunner.enabled = true;
       Events.off(engine, "afterUpdate", eventCallback);
     };
   }, []);
+
   return <div className="playground" ref={playgroundRef} />;
 };
 
