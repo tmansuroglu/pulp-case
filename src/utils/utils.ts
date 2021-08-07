@@ -1,12 +1,9 @@
 import { Bodies } from "matter-js";
-import {
-  catapultHorizontalStick,
-  HOLDER_X as MAX_RIGHT_SIDE_X,
-  CATAPULT_WIDTH,
-} from "../shapes/catapult";
+import { catapultHorizontalStick, CATAPULT_WIDTH } from "../shapes/catapult";
 import { MID_POINT_X } from "./common";
 
-const MIN_LEFT_SIDE_X = MID_POINT_X - CATAPULT_WIDTH / 2 + 10;
+const MIN_LEFT_SIDE_X = MID_POINT_X - CATAPULT_WIDTH / 2;
+const MAX_RIGHT_SIDE_X = MID_POINT_X + CATAPULT_WIDTH / 2;
 
 export const decideShape = (): "circle" | "rectangle" | "trapezoid" => {
   const shapeOptions: ["circle", "rectangle", "trapezoid"] = [
@@ -20,10 +17,10 @@ export const decideShape = (): "circle" | "rectangle" | "trapezoid" => {
 export const decideDensity = () => Math.round(Math.random() * 100) / 100;
 
 export const getRandomXForRightSide = () =>
-  Math.random() * (MAX_RIGHT_SIDE_X - MID_POINT_X + 5) + MID_POINT_X + 5;
+  Math.random() * (MAX_RIGHT_SIDE_X + 20 - MID_POINT_X) + MID_POINT_X;
 
 export const getRandomXForLeftSide = () =>
-  Math.random() * (MID_POINT_X - MIN_LEFT_SIDE_X) + MIN_LEFT_SIDE_X;
+  Math.random() * (MID_POINT_X - 20 - MIN_LEFT_SIDE_X) + MIN_LEFT_SIDE_X;
 
 export const createRandomObject = (side: "left" | "right") => {
   // density ranges between 0 and 1. density 1 causes glitches
