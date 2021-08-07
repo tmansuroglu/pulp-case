@@ -1,6 +1,6 @@
-import React, { FC, ReactElement, useEffect, useRef } from "react";
+import React, { FC, ReactElement, useEffect, useRef, useState } from "react";
 import "./index.css";
-import { Engine, Render, Runner, Composite } from "matter-js";
+import { Engine, Render, Runner, Composite, Events } from "matter-js";
 import { createRandomObject } from "../../utils/utils";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/common";
 import {
@@ -15,6 +15,7 @@ import ground from "../../shapes/ground";
 
 const Playground: FC = (): ReactElement => {
   const playgroundRef = useRef<HTMLDivElement>(null);
+  const [isGameOver, setIsGameOver] = useState(false);
 
   useEffect(() => {
     // create engine
@@ -58,11 +59,26 @@ const Playground: FC = (): ReactElement => {
       max: { x: SCREEN_WIDTH, y: SCREEN_HEIGHT },
     });
 
+    const eventCallback = () => {
+      const catapultAngle = Math.abs(catapult.angle) * 100;
+
+      if (catapultAngle > 30) {
+        setIsGameOver(true);
+      }
+    };
+    Events.on(engine, "afterUpdate", eventCallback);
+
     return () => {
       render.canvas.remove();
+      Events.off(engine, "afterUpdate", eventCallback);
     };
   }, []);
-  return <div ref={playgroundRef} className="playground" />;
+  return (
+    <div className="playground">
+      {isGameOver ? "Game Over" : null}
+      <div ref={playgroundRef} />
+    </div>
+  );
 };
 
 export default Playground;
