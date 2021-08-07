@@ -47,11 +47,17 @@ const Playground: FC = (): ReactElement => {
     Runner.run(runner, engine);
 
     // listen to board angle change
-    Events.on(engine, "collisionEnd", () => {
-      console.log(baseBoard.angle);
+    Events.on(engine, "collisionEnd", (e) => {
+      // console.log(baseBoard.angle);
+      console.log(e);
     });
 
-    return () => render.canvas.remove();
+    return () => {
+      render.canvas.remove();
+      // Events.off(engine, "collisionEnd", () => {
+      //   console.log(baseBoard.angle);
+      // });
+    };
   }, []);
   return <div ref={playgroundRef} className="playground" />;
 };

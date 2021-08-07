@@ -1,5 +1,5 @@
 import { Bodies } from "matter-js";
-import { MID_POINT_X, SCREEN_HEIGHT } from "./utils/common";
+import { MID_POINT_X, SCREEN_HEIGHT, TRIANGLE_ID } from "./utils/common";
 import { GROUND_HEIGHT } from "./ground";
 
 const TRIANGLE_HEIGHT = 100;
@@ -15,7 +15,7 @@ const baseTriangle = Bodies.trapezoid(
   TRIANGLE_HEIGHT,
   TRIANGLE_WIDTH,
   TRIANGLE_SLOPE,
-  { isStatic: true }
+  { isStatic: true, id: TRIANGLE_ID }
 );
 
 export default baseTriangle;
