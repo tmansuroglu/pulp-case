@@ -1,7 +1,7 @@
 import React, { FC, ReactElement, useEffect, useRef, useState } from "react";
 import "./index.css";
 import { Engine, Render, Runner, Composite, Events } from "matter-js";
-import { createRandomObject } from "../../utils/utils";
+import { createRandomObject, calculateKgM } from "../../utils/utils";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/common";
 import {
   catapult,
@@ -61,8 +61,17 @@ const Playground: FC = (): ReactElement => {
 
     const eventCallback = () => {
       const catapultAngle = Math.abs(catapult.angle) * 100;
+      const rightSideKgm = calculateKgM(
+        randomRightSideObject.density,
+        randomRightSideObject.position.x
+      );
 
-      if (catapultAngle > 30) {
+      const leftSideKgm = calculateKgM(
+        randomLeftSideObject.density,
+        randomLeftSideObject.position.x
+      );
+
+      if (catapultAngle > 30 || Math.abs(rightSideKgm - leftSideKgm) >= 20) {
         setIsGameOver(true);
       }
     };
