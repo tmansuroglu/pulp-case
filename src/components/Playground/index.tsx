@@ -36,7 +36,9 @@ const Playground: FC = (): ReactElement => {
     const runner = Runner.create();
     Runner.run(runner, engine);
 
-    const randomRightSideObject = createRandomObject();
+    const randomRightSideObject = createRandomObject("right");
+
+    const randomLeftSideObject = createRandomObject("left");
 
     Composite.add(world, [
       catapult,
@@ -46,6 +48,7 @@ const Playground: FC = (): ReactElement => {
       catapultConnector,
       rightSideHolder,
       randomRightSideObject,
+      randomLeftSideObject,
       rightSideBlocker,
     ]);
 

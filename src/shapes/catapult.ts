@@ -5,7 +5,7 @@ import ground from "./ground";
 const GROUND_MIN_Y = ground.bounds.min.y;
 
 const CATAPULT_HEIGHT = 80;
-const CATAPULT_WIDTH = SCREEN_WIDTH < 600 ? 300 : 500;
+export const CATAPULT_WIDTH = SCREEN_WIDTH < 600 ? 300 : 500;
 const CATAPULT_BOARD_HEIGHT = 20;
 const CATAPULT_Y = GROUND_MIN_Y - CATAPULT_HEIGHT / 2;
 
