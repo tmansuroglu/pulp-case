@@ -1,67 +1,83 @@
 import React, { FC, ReactElement, useEffect, useRef } from "react";
 import "./index.css";
-import Matter, {
+import {
   Engine,
   Render,
   Runner,
   Composite,
-  Events,
-  SAT,
+  Constraint,
+  Vector,
+  Body,
+  Bodies,
 } from "matter-js";
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from "./utils/common";
-import baseBoard from "./baseBoard";
-import ground from "./ground";
-import baseTriangle from "./baseTriangle";
-import rightConstraint from "./rightConstraint";
-import leftConstraint from "./leftConstraint";
-import circle from "./circle";
-
-// allows magnetism
-Matter.use("matter-attractors");
 
 const Playground: FC = (): ReactElement => {
   const playgroundRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // create an engine
+    // create engine
     const engine = Engine.create();
+    const { world } = engine;
 
-    // create a renderer
     const render = Render.create({
       element: playgroundRef.current,
       engine,
       options: {
-        hasBounds: true,
-        width: SCREEN_WIDTH,
-        height: SCREEN_HEIGHT,
+        width: 800,
+        height: 600,
       },
     });
 
-    // add all of the bodies to the world
-    Composite.add(engine.world, [
-      ground,
-      baseTriangle,
-      baseBoard,
-      circle,
-      rightConstraint,
-      leftConstraint,
-    ]);
-
-    // run the renderer
     Render.run(render);
 
     // create runner
     const runner = Runner.create();
-
-    // run the engine
     Runner.run(runner, engine);
 
-    // listen to board angle change
-    Events.on(engine, "collisionStart", () => {
-      const didCircleCollide = SAT.collides(baseBoard, circle).collided;
-      if (didCircleCollide) {
-        circle.friction = 1;
-      }
+    // add bodies
+    const group = Body.nextGroup(true);
+
+    const catapult = Bodies.rectangle(400, 520, 320, 20, {
+      collisionFilter: { group },
+    });
+
+    const ground = Bodies.rectangle(400, 600, 800, 50.5, {
+      isStatic: true,
+      render: { fillStyle: "#060a19" },
+    });
+
+    const catapultVerticalStick = Bodies.rectangle(400, 535, 20, 80, {
+      isStatic: true,
+      collisionFilter: { group },
+      render: { fillStyle: "#060a19" },
+    });
+
+    const catapultHorizontalStick = Bodies.rectangle(400, 535, 20, 80, {
+      isStatic: true,
+      collisionFilter: { group },
+      render: { fillStyle: "#060a19" },
+    });
+
+    const catapultConnector = Constraint.create({
+      bodyA: catapult,
+      pointB: Vector.clone(catapult.position),
+      stiffness: 1,
+      length: 0,
+    });
+
+    Composite.add(world, [
+      // stack,
+      catapult,
+      ground,
+      catapultVerticalStick,
+      catapultHorizontalStick,
+      catapultConnector,
+    ]);
+
+    // fit the render viewport to the scene
+    Render.lookAt(render, {
+      min: { x: 0, y: 0 },
+      max: { x: 800, y: 600 },
     });
 
     return () => {
