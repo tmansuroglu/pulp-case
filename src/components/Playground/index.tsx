@@ -66,30 +66,70 @@ const Playground: FC = (): ReactElement => {
       length: 0,
     });
 
-    const invisibleRightSideBlocker = Bodies.rectangle(573, 325, 20, 500, {
+    const rightSideHolder = Bodies.rectangle(550, 555, 20, 50, {
       isStatic: true,
+      density: 1,
+      render: { fillStyle: "#060a19" },
+    });
+
+    const rightSideBlocker = Bodies.rectangle(575, 400, 20, 300, {
+      isStatic: true,
+      density: 1,
       render: { fillStyle: "#060a19", visible: false },
     });
 
-    const invisibleLeftSideBlocker = Bodies.rectangle(225, 325, 20, 500, {
-      isStatic: true,
-      render: { fillStyle: "#060a19", visible: false },
-    });
+    const decideShape = (): "circle" | "rectangle" | "trapezoid" => {
+      const shapeOptions: ["circle", "rectangle", "trapezoid"] = [
+        "circle",
+        "rectangle",
+        "trapezoid",
+      ];
+      return shapeOptions[Math.floor(Math.random() * shapeOptions.length)];
+    };
 
-    const randomWeight = Bodies.circle(420, 450, 20, {
-      friction: 1,
-    });
+    const decideDensity = () => Math.round(Math.random() * 100) / 100;
+
+    const getRandomXForRightSide = () => Math.random() * (560 - 450) + 450;
+
+    // const getRandomXForLeftSide = () => {
+    //   return Math.random() * (450 - 210) + 210;
+    // };
+
+    const createRandomObject = () => {
+      const density = decideDensity() / 1000;
+      const shape = decideShape();
+      const randomX = getRandomXForRightSide();
+      const YValue = catapultHorizontalStick.bounds.min.y;
+      const vertices = density * 70000;
+      let object;
+      if (shape === "trapezoid") {
+        object = Bodies.trapezoid(randomX, YValue, vertices, vertices, 1, {
+          density,
+        });
+      } else if (shape === "circle") {
+        object = Bodies.circle(randomX, YValue, vertices, {
+          density,
+        });
+      } else {
+        object = Bodies.rectangle(randomX, YValue, vertices, vertices, {
+          density,
+        });
+      }
+      return object;
+    };
+
+    const randomRightSideObject = createRandomObject();
+    createRandomObject();
 
     Composite.add(world, [
-      // stack,
       catapult,
       ground,
       catapultVerticalStick,
       catapultHorizontalStick,
       catapultConnector,
-      randomWeight,
-      invisibleRightSideBlocker,
-      invisibleLeftSideBlocker,
+      rightSideHolder,
+      randomRightSideObject,
+      rightSideBlocker,
     ]);
 
     // fit the render viewport to the scene
@@ -100,9 +140,6 @@ const Playground: FC = (): ReactElement => {
 
     return () => {
       render.canvas.remove();
-      // Events.off(engine, "collisionEnd", () => {
-      //   console.log(baseBoard.angle);
-      // });
     };
   }, []);
   return <div ref={playgroundRef} className="playground" />;
