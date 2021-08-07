@@ -73,6 +73,7 @@ const Playground: FC = (): ReactElement => {
 
       if (catapultAngle > 30 || Math.abs(rightSideKgm - leftSideKgm) >= 20) {
         setIsGameOver(true);
+        console.log(isGameOver);
       }
     };
     Events.on(engine, "afterUpdate", eventCallback);
@@ -82,12 +83,7 @@ const Playground: FC = (): ReactElement => {
       Events.off(engine, "afterUpdate", eventCallback);
     };
   }, []);
-  return (
-    <div className="playground">
-      {isGameOver ? "Game Over" : null}
-      <div ref={playgroundRef} />
-    </div>
-  );
+  return <div className="playground" ref={playgroundRef} />;
 };
 
 export default Playground;
