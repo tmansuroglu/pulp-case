@@ -1,6 +1,13 @@
 import React, { FC, ReactElement, useEffect, useRef } from "react";
 import "./index.css";
-import { Engine, Render, Runner, Composite, Events, SAT } from "matter-js";
+import Matter, {
+  Engine,
+  Render,
+  Runner,
+  Composite,
+  Events,
+  SAT,
+} from "matter-js";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "./utils/common";
 import baseBoard from "./baseBoard";
 import ground from "./ground";
@@ -9,8 +16,11 @@ import rightConstraint from "./rightConstraint";
 import leftConstraint from "./leftConstraint";
 import circle from "./circle";
 
+// allows magnetism
+Matter.use("matter-attractors");
+
 const Playground: FC = (): ReactElement => {
-  const playgroundRef = useRef(null);
+  const playgroundRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // create an engine
