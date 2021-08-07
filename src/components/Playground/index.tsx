@@ -56,6 +56,7 @@ const Playground: FC = (): ReactElement => {
       isStatic: true,
       collisionFilter: { group },
       render: { fillStyle: "#060a19" },
+      friction: 1,
     });
 
     const catapultConnector = Constraint.create({
@@ -65,6 +66,20 @@ const Playground: FC = (): ReactElement => {
       length: 0,
     });
 
+    const invisibleRightSideBlocker = Bodies.rectangle(573, 325, 20, 500, {
+      isStatic: true,
+      render: { fillStyle: "#060a19", visible: false },
+    });
+
+    const invisibleLeftSideBlocker = Bodies.rectangle(225, 325, 20, 500, {
+      isStatic: true,
+      render: { fillStyle: "#060a19", visible: false },
+    });
+
+    const randomWeight = Bodies.circle(420, 450, 20, {
+      friction: 1,
+    });
+
     Composite.add(world, [
       // stack,
       catapult,
@@ -72,6 +87,9 @@ const Playground: FC = (): ReactElement => {
       catapultVerticalStick,
       catapultHorizontalStick,
       catapultConnector,
+      randomWeight,
+      invisibleRightSideBlocker,
+      invisibleLeftSideBlocker,
     ]);
 
     // fit the render viewport to the scene
