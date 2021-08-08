@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useEffect, useRef, useState } from "react";
+import React, { FC, ReactElement, useEffect, useRef } from "react";
 import "./index.css";
 import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
 import { connect } from "react-redux";
@@ -12,7 +12,7 @@ import {
   SAT,
 } from "matter-js";
 import { createRandomObject, calculateKgM } from "../../utils/utils";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/common";
+import { MID_POINT_X, SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/common";
 import {
   catapult,
   catapultConnector,
@@ -23,14 +23,17 @@ import {
   leftSideBlocker,
 } from "../../shapes/catapult";
 // eslint-disable-next-line
-import { unpauseGame as handleUnpauseGame } from "../../redux/actions";
+import {
+  unpauseGame as handleUnpauseGame,
+  pauseGame as handlePauseGame,
+} from "../../redux/actions";
 import ground from "../../shapes/ground";
 import { RootState } from "../../redux/store";
 import { LocalState } from "../../redux/reducers";
 
 // create engine
-const engine = Engine.create();
-const { world } = engine;
+export const engine = Engine.create();
+export const { world } = engine;
 
 // create runner
 const runner = Runner.create();
@@ -39,19 +42,22 @@ export const createdRunner = Runner.run(runner, engine);
 interface PropTypes {
   reduxState: LocalState;
   unpauseGame: Function;
+  pauseGame: Function;
 }
 
 const Playground: FC<PropTypes> = ({
   reduxState,
   unpauseGame,
+  pauseGame,
 }: PropTypes): ReactElement => {
   const playgroundRef = useRef<HTMLDivElement>(null);
-  const [isGameOver, setIsGameOver] = useState(false);
 
   let randomLeftSideObject = createRandomObject(
     "left",
     reduxState.isGameSimulating
   );
+
+  console.log(reduxState.isGameSimulating);
 
   useEffect(() => {
     const render = Render.create({
@@ -101,9 +107,9 @@ const Playground: FC<PropTypes> = ({
       const otherBodies: Body[] = [];
       world.bodies.forEach((body: Body) => {
         if (
-          body.id !== randomLeftSideObject.id
-          // body.id !== leftSideBlocker.id &&
-          // body.id !== rightSideBlocker.id
+          body.id !== randomLeftSideObject.id &&
+          body.id !== leftSideBlocker.id &&
+          body.id !== rightSideBlocker.id
         ) {
           otherBodies.push(body);
         }
@@ -123,8 +129,7 @@ const Playground: FC<PropTypes> = ({
       });
 
       if (catapultAngle > 30 || Math.abs(rightSideKgm - leftSideKgm) >= 20) {
-        setIsGameOver(true);
-        console.log(isGameOver);
+        pauseGame();
       }
     };
     Events.on(engine, "afterUpdate", eventCallback);
@@ -145,14 +150,16 @@ const Playground: FC<PropTypes> = ({
       e.preventDefault();
       const oldPosition = randomLeftSideObject.position;
       if (e.key === "ArrowLeft") {
+        const newX = oldPosition.x - 5;
         Body.set(randomLeftSideObject, "position", {
           ...oldPosition,
-          x: oldPosition.x - 5,
+          x: leftSideBlocker.bounds.max.x + 10 > newX ? oldPosition.x : newX,
         });
       } else if (e.key === "ArrowRight") {
+        const newX = oldPosition.x + 5;
         Body.set(randomLeftSideObject, "position", {
           ...oldPosition,
-          x: oldPosition.x + 5,
+          x: MID_POINT_X - 35 < newX ? oldPosition.x : newX,
         });
       } else if (e.key === "ArrowDown") {
         Body.set(randomLeftSideObject, "position", {
@@ -174,6 +181,7 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<RootState, void, AnyAction>
 ) => ({
   unpauseGame: () => dispatch(handleUnpauseGame()),
+  pauseGame: () => dispatch(handlePauseGame()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Playground);

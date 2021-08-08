@@ -95,7 +95,7 @@ export const rightSideBlocker = Bodies.rectangle(
   {
     isStatic: true,
     density: 1,
-    render: { fillStyle: "#060a19", visible: true },
+    render: { fillStyle: "#060a19", visible: false },
   }
 );
 
@@ -107,6 +107,6 @@ export const leftSideBlocker = Bodies.rectangle(
   {
     isStatic: true,
     density: 1,
-    render: { fillStyle: "#060a19", visible: true },
+    render: { fillStyle: "#060a19", visible: false },
   }
 );
