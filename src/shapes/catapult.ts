@@ -1,5 +1,5 @@
 import { Bodies, Body, Constraint, Vector } from "matter-js";
-import { MID_POINT_X, SCREEN_WIDTH } from "../utils/common";
+import { MID_POINT_X, SCREEN_WIDTH, SCREEN_HEIGHT } from "../utils/common";
 import ground from "./ground";
 
 const GROUND_MIN_Y = ground.bounds.min.y;
@@ -20,9 +20,14 @@ const HOLDER_WIDTH = 20;
 
 export const HOLDER_X = MID_POINT_X + CATAPULT_WIDTH / 2 - HOLDER_WIDTH / 2;
 
-const BLOCKER_X = HOLDER_X + 25;
-const BLOCKER_WIDTH = 20;
-const BLOCKER_HEIGHT = 300;
+const RIGHT_BLOCKER_X = HOLDER_X + 25;
+const RIGHT_BLOCKER_WIDTH = 20;
+const RIGHT_BLOCKER_HEIGHT = SCREEN_HEIGHT;
+
+const LEFT_BLOCKER_WIDTH = 20;
+const LEFT_BLOCKER_X =
+  MID_POINT_X - CATAPULT_WIDTH / 2 - LEFT_BLOCKER_WIDTH / 2 - 5;
+const LEFT_BLOCKER_HEIGHT = SCREEN_HEIGHT;
 
 // add bodies
 const group = Body.nextGroup(true);
@@ -83,13 +88,25 @@ export const rightSideHolder = Bodies.rectangle(
 );
 
 export const rightSideBlocker = Bodies.rectangle(
-  BLOCKER_X,
-  GROUND_MIN_Y - BLOCKER_HEIGHT / 2,
-  BLOCKER_WIDTH,
-  BLOCKER_HEIGHT,
+  RIGHT_BLOCKER_X,
+  GROUND_MIN_Y - RIGHT_BLOCKER_HEIGHT / 2,
+  RIGHT_BLOCKER_WIDTH,
+  RIGHT_BLOCKER_HEIGHT,
   {
     isStatic: true,
     density: 1,
-    render: { fillStyle: "#060a19", visible: false },
+    render: { fillStyle: "#060a19", visible: true },
+  }
+);
+
+export const leftSideBlocker = Bodies.rectangle(
+  LEFT_BLOCKER_X,
+  GROUND_MIN_Y - LEFT_BLOCKER_HEIGHT / 2,
+  LEFT_BLOCKER_WIDTH,
+  LEFT_BLOCKER_HEIGHT,
+  {
+    isStatic: true,
+    density: 1,
+    render: { fillStyle: "#060a19", visible: true },
   }
 );

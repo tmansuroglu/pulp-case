@@ -20,6 +20,7 @@ import {
   catapultVerticalStick,
   rightSideBlocker,
   rightSideHolder,
+  leftSideBlocker,
 } from "../../shapes/catapult";
 // eslint-disable-next-line
 import { unpauseGame as handleUnpauseGame } from "../../redux/actions";
@@ -76,6 +77,7 @@ const Playground: FC<PropTypes> = ({
       randomRightSideObject,
       randomLeftSideObject,
       rightSideBlocker,
+      leftSideBlocker,
     ]);
 
     // fit the render viewport to the scene
@@ -98,7 +100,11 @@ const Playground: FC<PropTypes> = ({
 
       const otherBodies: Body[] = [];
       world.bodies.forEach((body: Body) => {
-        if (body.id !== randomLeftSideObject.id) {
+        if (
+          body.id !== randomLeftSideObject.id
+          // body.id !== leftSideBlocker.id &&
+          // body.id !== rightSideBlocker.id
+        ) {
           otherBodies.push(body);
         }
       });
