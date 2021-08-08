@@ -1,6 +1,6 @@
+/* eslint-disable */
 import React, { FC, ReactElement, useEffect, useRef } from "react";
 import "./index.css";
-import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
 import { connect } from "react-redux";
 import {
   Engine,
@@ -48,19 +48,19 @@ export const { world } = engine;
 const runner = Runner.create();
 export const createdRunner = Runner.run(runner, engine);
 
-interface PropTypes {
-  reduxState: LocalState;
-  unpauseGame: Function;
-  pauseGame: Function;
+// interface PropTypes {
+//   reduxState: LocalState;
+//   unpauseGame: Function;
+//   pauseGame: Function;
 
-  setLeftSideKgm: Function;
-  setRightSideKgm: Function;
-  setRightSideTotalWeight: Function;
-  // setLeftSideTotalWeight: Function;
-  setLeftSideItemWeight: Function;
-}
+//   setLeftSideKgm: Function;
+//   setRightSideKgm: Function;
+//   setRightSideTotalWeight: Function;
+//   // setLeftSideTotalWeight: Function;
+//   setLeftSideItemWeight: Function;
+// }
 
-const Playground: FC<PropTypes> = ({
+const Playground = ({
   reduxState,
   unpauseGame,
   pauseGame,
@@ -69,11 +69,9 @@ const Playground: FC<PropTypes> = ({
   setRightSideKgm,
   setRightSideTotalWeight,
   setLeftSideItemWeight,
-}: // setLeftSideTotalWeight,
-
-PropTypes): ReactElement => {
+}) => {
   // eslint-disable-next-line
-  const playgroundRef = useRef<HTMLDivElement | null>(null);
+  const playgroundRef = useRef(null);
 
   let randomLeftSideObject = createRandomObject("left", true);
 
@@ -141,8 +139,8 @@ PropTypes): ReactElement => {
     const eventCallback = () => {
       const catapultAngle = Math.abs(catapult.angle) * 100;
 
-      const otherBodies: Body[] = [];
-      world.bodies.forEach((body: Body) => {
+      const otherBodies = [];
+      world.bodies.forEach((body) => {
         if (
           body.id !== randomLeftSideObject.id &&
           body.id !== leftSideBlocker.id &&
@@ -220,22 +218,19 @@ PropTypes): ReactElement => {
   return <div className="playground" ref={playgroundRef} />;
 };
 
-const mapStateToProps = (reduxState: RootState) => ({
+const mapStateToProps = (reduxState) => ({
   reduxState: reduxState.playgroundState,
 });
 
-const mapDispatchToProps = (
-  dispatch: ThunkDispatch<RootState, void, AnyAction>
-) => ({
+const mapDispatchToProps = (dispatch) => ({
   unpauseGame: () => dispatch(handleUnpauseGame()),
   pauseGame: () => dispatch(handlePauseGame()),
-  setLeftSideItemWeight: (weight: number) =>
-    dispatch(handleLeftSideItemWeight(weight)),
-  setLeftSideKgm: (kgm: number) => dispatch(handleLeftSideKgm(kgm)),
-  setRightSideKgm: (kgm: number) => dispatch(handleRightSideKgm(kgm)),
-  setLeftSideTotalWeight: (weight: number) =>
+  setLeftSideItemWeight: (weight) => dispatch(handleLeftSideItemWeight(weight)),
+  setLeftSideKgm: (kgm) => dispatch(handleLeftSideKgm(kgm)),
+  setRightSideKgm: (kgm) => dispatch(handleRightSideKgm(kgm)),
+  setLeftSideTotalWeight: (weight) =>
     dispatch(handleLeftSideTotalWeight(weight)),
-  setRightSideTotalWeight: (weight: number) =>
+  setRightSideTotalWeight: (weight) =>
     dispatch(handleRightSideTotalWeight(weight)),
 });
 
