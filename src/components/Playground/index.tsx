@@ -57,8 +57,6 @@ const Playground: FC<PropTypes> = ({
     reduxState.isGameSimulating
   );
 
-  console.log(reduxState.isGameSimulating);
-
   useEffect(() => {
     const render = Render.create({
       element: playgroundRef.current,
