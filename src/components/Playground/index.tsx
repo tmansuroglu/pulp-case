@@ -72,6 +72,7 @@ const Playground: FC<PropTypes> = ({
 }: // setLeftSideTotalWeight,
 
 PropTypes): ReactElement => {
+  // eslint-disable-next-line
   const playgroundRef = useRef<HTMLDivElement>(null);
 
   let randomLeftSideObject = createRandomObject("left", true);
@@ -86,6 +87,7 @@ PropTypes): ReactElement => {
     );
     unpauseGame();
     const render = Render.create({
+      // eslint-disable-next-line
       element: playgroundRef.current,
       engine,
       options: {
@@ -214,6 +216,7 @@ PropTypes): ReactElement => {
     });
   }, [reduxState.isGameSimulating]);
 
+  // eslint-disable-next-line
   return <div className="playground" ref={playgroundRef} />;
 };
 
