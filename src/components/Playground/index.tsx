@@ -73,7 +73,7 @@ const Playground: FC<PropTypes> = ({
 
 PropTypes): ReactElement => {
   // eslint-disable-next-line
-  const playgroundRef = useRef<HTMLDivElement>(null);
+  const playgroundRef = useRef<HTMLDivElement | null>(null);
 
   let randomLeftSideObject = createRandomObject("left", true);
 
