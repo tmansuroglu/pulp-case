@@ -24,7 +24,10 @@ export const getRandomXForRightSide = () =>
 export const getRandomXForLeftSide = () =>
   Math.random() * (MID_POINT_X - 20 - MIN_LEFT_SIDE_X) + MIN_LEFT_SIDE_X;
 
-export const createRandomObject = (side: "left" | "right") => {
+export const createRandomObject = (
+  side: "left" | "right",
+  isGameSimulating: boolean
+) => {
   // density ranges between 0 and 1. density 1 causes glitches
   const density = decideDensity() / DENSITY_COEFFICIENT;
   const shape = decideShape();
@@ -32,21 +35,25 @@ export const createRandomObject = (side: "left" | "right") => {
     side === "right" ? getRandomXForRightSide() : getRandomXForLeftSide();
   const YValue =
     side === "right"
-      ? catapultHorizontalStick.bounds.min.y - 25
+      ? catapultHorizontalStick.bounds.min.y - 35
       : catapultHorizontalStick.bounds.min.y - 200;
   const vertices = density * VERTICES_COEFFICIENT;
   let object;
+  const isStatic = !isGameSimulating && side !== "right";
   if (shape === "trapezoid") {
     object = Bodies.trapezoid(randomX, YValue, vertices, vertices, 1, {
       density,
+      isStatic,
     });
   } else if (shape === "circle") {
     object = Bodies.circle(randomX, YValue, vertices / 1.2, {
       density,
+      isStatic,
     });
   } else {
     object = Bodies.rectangle(randomX, YValue, vertices, vertices, {
       density,
+      isStatic,
     });
   }
   return object;

@@ -5,7 +5,7 @@ import ControlBar from "../../components/ControlBar";
 
 const HomePage: FC = (): ReactElement => (
   <>
-    <ControlBar isSimulating={false} setIsSimulating={() => "a"} />
+    <ControlBar />
     <Playground />
   </>
 );

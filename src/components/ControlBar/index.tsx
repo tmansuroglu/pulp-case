@@ -10,24 +10,18 @@ import {
 } from "../../redux/actions";
 
 interface PropTypes {
-  isSimulating: boolean;
-  setIsSimulating: MouseEventHandler;
   reduxState: LocalState;
   pauseGame: MouseEventHandler;
   unpauseGame: MouseEventHandler;
 }
 
 const ControlBar: FC<PropTypes> = ({
-  isSimulating,
-  setIsSimulating,
   reduxState,
   pauseGame,
   unpauseGame,
 }: PropTypes): ReactElement => (
   <div className="controlbar-container">
-    <button onClick={setIsSimulating} type="button">
-      {isSimulating ? "Turn off auto-simulate" : "Turn on auto-simulate"}
-    </button>
+    <button type="button">Turn on auto-simulate</button>
     <button
       type="button"
       onClick={reduxState.isGamePaused ? unpauseGame : pauseGame}
