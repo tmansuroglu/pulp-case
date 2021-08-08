@@ -15,26 +15,26 @@ interface PropTypes {
   reduxState: LocalState;
   pauseGame: MouseEventHandler;
   unpauseGame: MouseEventHandler;
-  beginSimulating: MouseEventHandler;
-  stopSimulating: MouseEventHandler;
+  // beginSimulating: MouseEventHandler;
+  // stopSimulating: MouseEventHandler;
 }
 
 const ControlBar: FC<PropTypes> = ({
   reduxState,
   pauseGame,
   unpauseGame,
-  beginSimulating,
-  stopSimulating,
-}: PropTypes): ReactElement => (
+}: // beginSimulating,
+// stopSimulating,
+PropTypes): ReactElement => (
   <div className="controlbar-container">
-    <button
+    {/* <button
       type="button"
       onClick={reduxState.isGameSimulating ? stopSimulating : beginSimulating}
     >
       {reduxState.isGameSimulating
         ? "Reset & Stop simulating"
         : "Reset & Start simulating"}
-    </button>
+    </button> */}
     <button
       type="button"
       onClick={reduxState.isGamePaused ? unpauseGame : pauseGame}

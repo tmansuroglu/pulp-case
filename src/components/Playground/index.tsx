@@ -127,7 +127,8 @@ const Playground: FC<PropTypes> = ({
       });
 
       if (catapultAngle > 30 || Math.abs(rightSideKgm - leftSideKgm) >= 20) {
-        pauseGame();
+        // pauseGame();
+        console.log(pauseGame);
       }
     };
     Events.on(engine, "afterUpdate", eventCallback);
