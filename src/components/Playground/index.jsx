@@ -137,12 +137,6 @@ const Playground = ({
     });
 
     const eventCallback = () => {
-      const catapultAngle = Math.abs(catapult.angle) * 100;
-      if (catapultAngle > 30) {
-        pauseGame();
-        alert("Game Over");
-      }
-
       const otherBodies = [];
       world.bodies.forEach((body) => {
         if (
@@ -154,6 +148,11 @@ const Playground = ({
         }
       });
 
+      // for some reason angle checking only works if devleoper console is open.
+      // this is a placeholder for angle rule
+      if (SAT.collides(catapult, ground).collided) {
+        window.location.reload();
+      }
       otherBodies.forEach((body) => {
         if (SAT.collides(randomLeftSideObject, body).collided) {
           Body.set(randomLeftSideObject, "isStatic", false);
@@ -176,7 +175,6 @@ const Playground = ({
     return () => {
       unpauseGame();
       render.canvas.remove();
-      Events.off(engine, "afterUpdate", eventCallback);
     };
   }, []);
 
