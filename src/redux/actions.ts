@@ -77,3 +77,28 @@ export const stopSimulating = () => ({
 //   type: actions.STOP_SIMULATING_FAILURE,
 //   payload: error,
 // });
+
+export const setRightSideTotalWeight = (weight: number) => ({
+  type: actions.SET_RIGHT_SIDE_TOTAL_WEIGHT,
+  payload: weight,
+});
+
+export const setLeftSideTotalWeight = (weight: number) => ({
+  type: actions.SET_LEFT_SIDE_TOTAL_WEIGHT,
+  payload: weight,
+});
+
+export const setRightSideKGM = (kgm: number) => ({
+  type: actions.SET_RIGHT_SIDE_KGM,
+  payload: kgm,
+});
+
+export const setLeftSideKGM = (kgm: number) => ({
+  type: actions.SET_LEFT_SIDE_KGM,
+  payload: kgm,
+});
+
+export const setLeftSideItemWeight = (weight: number) => ({
+  type: actions.SET_LEFT_SIDE_ITEM_WEIGHT,
+  payload: weight,
+});

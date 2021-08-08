@@ -4,8 +4,8 @@ import { MID_POINT_X } from "./common";
 
 const MIN_LEFT_SIDE_X = MID_POINT_X - CATAPULT_WIDTH / 2;
 const MAX_RIGHT_SIDE_X = MID_POINT_X + CATAPULT_WIDTH / 2;
-const DENSITY_COEFFICIENT = 100000;
-const VERTICES_COEFFICIENT = 50000;
+export const DENSITY_COEFFICIENT = 100000;
+const VERTICES_COEFFICIENT = 45000;
 
 export const decideShape = (): "circle" | "rectangle" | "trapezoid" => {
   const shapeOptions: ["circle", "rectangle", "trapezoid"] = [
@@ -29,7 +29,9 @@ export const createRandomObject = (
   isGameSimulating: boolean
 ) => {
   // density ranges between 0 and 1. density 1 causes glitches
-  const density = decideDensity() / DENSITY_COEFFICIENT;
+  const baseDensity = decideDensity();
+  const density = baseDensity / DENSITY_COEFFICIENT;
+
   const shape = decideShape();
   const randomX =
     side === "right" ? getRandomXForRightSide() : getRandomXForLeftSide();

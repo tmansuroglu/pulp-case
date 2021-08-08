@@ -35,12 +35,27 @@ PropTypes): ReactElement => (
         ? "Reset & Stop simulating"
         : "Reset & Start simulating"}
     </button> */}
-    <button
-      type="button"
-      onClick={reduxState.isGamePaused ? unpauseGame : pauseGame}
-    >
-      {reduxState.isGamePaused ? "Continue Playing" : "Pause Game"}
+
+    <button type="button" onClick={() => window.location.reload()}>
+      Reset
     </button>
+
+    <div>
+      <button
+        type="button"
+        onClick={reduxState.isGamePaused ? unpauseGame : pauseGame}
+      >
+        {reduxState.isGamePaused ? "Continue Playing" : "Pause Game"}
+      </button>
+    </div>
+
+    {/* <div className="info-container">
+      <div>Right side kgm: {reduxState.rightSideKgm}</div>
+      <div>Left side kgm: {reduxState.leftSideKgm}</div>
+      <div>Left side total weight: {reduxState.leftSideTotalWeight}</div>
+      <div>Right side total weight: {reduxState.rightSideTotalWeight}</div>
+      <div>New object weight: {reduxState.leftSideItemWeight}</div>
+    </div> */}
   </div>
 );
 

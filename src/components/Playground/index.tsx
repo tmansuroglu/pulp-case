@@ -11,7 +11,11 @@ import {
   Body,
   SAT,
 } from "matter-js";
-import { createRandomObject, calculateKgM } from "../../utils/utils";
+import {
+  createRandomObject,
+  calculateKgM,
+  DENSITY_COEFFICIENT,
+} from "../../utils/utils";
 import { MID_POINT_X, SCREEN_HEIGHT, SCREEN_WIDTH } from "../../utils/common";
 import {
   catapult,
@@ -26,6 +30,11 @@ import {
 import {
   unpauseGame as handleUnpauseGame,
   pauseGame as handlePauseGame,
+  setLeftSideItemWeight as handleLeftSideItemWeight,
+  setLeftSideKGM as handleLeftSideKgm,
+  setRightSideKGM as handleRightSideKgm,
+  setRightSideTotalWeight as handleRightSideTotalWeight,
+  setLeftSideTotalWeight as handleLeftSideTotalWeight,
 } from "../../redux/actions";
 import ground from "../../shapes/ground";
 import { RootState } from "../../redux/store";
@@ -43,21 +52,39 @@ interface PropTypes {
   reduxState: LocalState;
   unpauseGame: Function;
   pauseGame: Function;
+
+  setLeftSideKgm: Function;
+  setRightSideKgm: Function;
+  setRightSideTotalWeight: Function;
+  // setLeftSideTotalWeight: Function;
+  setLeftSideItemWeight: Function;
 }
 
 const Playground: FC<PropTypes> = ({
   reduxState,
   unpauseGame,
   pauseGame,
-}: PropTypes): ReactElement => {
+
+  setLeftSideKgm,
+  setRightSideKgm,
+  setRightSideTotalWeight,
+  setLeftSideItemWeight,
+}: // setLeftSideTotalWeight,
+
+PropTypes): ReactElement => {
   const playgroundRef = useRef<HTMLDivElement>(null);
 
-  let randomLeftSideObject = createRandomObject(
-    "left",
-    reduxState.isGameSimulating
-  );
+  let randomLeftSideObject = createRandomObject("left", true);
+
+  // setLeftSideTotalWeight(
+  //   randomLeftSideObject.density * DENSITY_COEFFICIENT * 100
+  // );
 
   useEffect(() => {
+    setLeftSideItemWeight(
+      (randomLeftSideObject.density * DENSITY_COEFFICIENT) / 10
+    );
+    unpauseGame();
     const render = Render.create({
       element: playgroundRef.current,
       engine,
@@ -70,6 +97,25 @@ const Playground: FC<PropTypes> = ({
     Render.run(render);
 
     const randomRightSideObject = createRandomObject("right", false);
+
+    const rightSideKgm = calculateKgM(
+      randomRightSideObject.density,
+      randomRightSideObject.position.x
+    );
+
+    if (rightSideKgm !== Infinity) {
+      setRightSideKgm(rightSideKgm);
+    }
+    setRightSideTotalWeight(
+      (randomRightSideObject.density * DENSITY_COEFFICIENT) / 10
+    );
+
+    const leftSideKgm = calculateKgM(
+      randomLeftSideObject.density,
+      randomLeftSideObject.position.x
+    );
+
+    setLeftSideKgm(leftSideKgm);
 
     Composite.add(world, [
       catapult,
@@ -92,15 +138,6 @@ const Playground: FC<PropTypes> = ({
 
     const eventCallback = () => {
       const catapultAngle = Math.abs(catapult.angle) * 100;
-      const rightSideKgm = calculateKgM(
-        randomRightSideObject.density,
-        randomRightSideObject.position.x
-      );
-
-      const leftSideKgm = calculateKgM(
-        randomLeftSideObject.density,
-        randomLeftSideObject.position.x
-      );
 
       const otherBodies: Body[] = [];
       world.bodies.forEach((body: Body) => {
@@ -113,6 +150,18 @@ const Playground: FC<PropTypes> = ({
         }
       });
 
+      if (
+        catapultAngle > 30 ||
+        Math.abs(reduxState.rightSideKgm - reduxState.leftSideKgm) >= 20
+      ) {
+        console.log("angle", catapultAngle);
+        console.log("kgm", reduxState.rightSideKgm - reduxState.leftSideKgm);
+        pauseGame();
+        alert("Game Over");
+        return;
+      }
+
+      console.log(reduxState.leftSideKgm);
       otherBodies.forEach((body) => {
         if (SAT.collides(randomLeftSideObject, body).collided) {
           Body.set(randomLeftSideObject, "isStatic", false);
@@ -122,14 +171,13 @@ const Playground: FC<PropTypes> = ({
             reduxState.isGameSimulating
           );
 
+          setLeftSideItemWeight(
+            (randomLeftSideObject.density * DENSITY_COEFFICIENT) / 10
+          );
+
           Composite.add(world, randomLeftSideObject);
         }
       });
-
-      if (catapultAngle > 30 || Math.abs(rightSideKgm - leftSideKgm) >= 20) {
-        // pauseGame();
-        console.log(pauseGame);
-      }
     };
     Events.on(engine, "afterUpdate", eventCallback);
 
@@ -181,6 +229,14 @@ const mapDispatchToProps = (
 ) => ({
   unpauseGame: () => dispatch(handleUnpauseGame()),
   pauseGame: () => dispatch(handlePauseGame()),
+  setLeftSideItemWeight: (weight: number) =>
+    dispatch(handleLeftSideItemWeight(weight)),
+  setLeftSideKgm: (kgm: number) => dispatch(handleLeftSideKgm(kgm)),
+  setRightSideKgm: (kgm: number) => dispatch(handleRightSideKgm(kgm)),
+  setLeftSideTotalWeight: (weight: number) =>
+    dispatch(handleLeftSideTotalWeight(weight)),
+  setRightSideTotalWeight: (weight: number) =>
+    dispatch(handleRightSideTotalWeight(weight)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Playground);
