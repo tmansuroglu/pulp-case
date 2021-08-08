@@ -13,20 +13,19 @@ import {
 } from "../../shapes/catapult";
 import ground from "../../shapes/ground";
 
+// create engine
+const engine = Engine.create();
+const { world } = engine;
+
+// create runner
+const runner = Runner.create();
+export const createdRunner = Runner.run(runner, engine);
+
 const Playground: FC = (): ReactElement => {
   const playgroundRef = useRef<HTMLDivElement>(null);
   const [isGameOver, setIsGameOver] = useState(false);
 
   useEffect(() => {
-    // create engine
-    const engine = Engine.create();
-    const { world } = engine;
-
-    // create runner
-    const runner = Runner.create();
-    const createdRunner = Runner.run(runner, engine);
-    createdRunner.enabled = true;
-
     const render = Render.create({
       element: playgroundRef.current,
       engine,
@@ -74,7 +73,6 @@ const Playground: FC = (): ReactElement => {
 
       if (catapultAngle > 30 || Math.abs(rightSideKgm - leftSideKgm) >= 20) {
         setIsGameOver(true);
-        createdRunner.enabled = false;
         console.log(isGameOver);
       }
     };
@@ -82,7 +80,6 @@ const Playground: FC = (): ReactElement => {
 
     return () => {
       render.canvas.remove();
-      createdRunner.enabled = true;
       Events.off(engine, "afterUpdate", eventCallback);
     };
   }, []);
