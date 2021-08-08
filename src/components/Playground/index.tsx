@@ -154,14 +154,11 @@ PropTypes): ReactElement => {
         catapultAngle > 30 ||
         Math.abs(reduxState.rightSideKgm - reduxState.leftSideKgm) >= 20
       ) {
-        console.log("angle", catapultAngle);
-        console.log("kgm", reduxState.rightSideKgm - reduxState.leftSideKgm);
         pauseGame();
         alert("Game Over");
         return;
       }
 
-      console.log(reduxState.leftSideKgm);
       otherBodies.forEach((body) => {
         if (SAT.collides(randomLeftSideObject, body).collided) {
           Body.set(randomLeftSideObject, "isStatic", false);
