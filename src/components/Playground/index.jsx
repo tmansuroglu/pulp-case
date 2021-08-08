@@ -64,7 +64,6 @@ const Playground = ({
   reduxState,
   unpauseGame,
   pauseGame,
-
   setLeftSideKgm,
   setRightSideKgm,
   setRightSideTotalWeight,
@@ -73,7 +72,7 @@ const Playground = ({
   // eslint-disable-next-line
   const playgroundRef = useRef(null);
 
-  let randomLeftSideObject = createRandomObject("left", true);
+  let randomLeftSideObject = createRandomObject("left", false);
 
   // setLeftSideTotalWeight(
   //   randomLeftSideObject.density * DENSITY_COEFFICIENT * 100
@@ -178,34 +177,29 @@ const Playground = ({
     };
   }, []);
 
-  useEffect(() => {
-    if (reduxState.isGameSimulating) {
-      return;
-    }
+  window.addEventListener("keydown", (e) => {
+    e.preventDefault();
 
-    window.addEventListener("keydown", (e) => {
-      e.preventDefault();
-      const oldPosition = randomLeftSideObject.position;
-      if (e.key === "ArrowLeft") {
-        const newX = oldPosition.x - 5;
-        Body.set(randomLeftSideObject, "position", {
-          ...oldPosition,
-          x: leftSideBlocker.bounds.max.x + 10 > newX ? oldPosition.x : newX,
-        });
-      } else if (e.key === "ArrowRight") {
-        const newX = oldPosition.x + 5;
-        Body.set(randomLeftSideObject, "position", {
-          ...oldPosition,
-          x: MID_POINT_X - 35 < newX ? oldPosition.x : newX,
-        });
-      } else if (e.key === "ArrowDown") {
-        Body.set(randomLeftSideObject, "position", {
-          ...oldPosition,
-          y: oldPosition.y + 5,
-        });
-      }
-    });
-  }, [reduxState.isGameSimulating]);
+    const oldPosition = randomLeftSideObject.position;
+    if (e.key === "ArrowLeft") {
+      const newX = oldPosition.x - 5;
+      Body.set(randomLeftSideObject, "position", {
+        ...oldPosition,
+        x: leftSideBlocker.bounds.max.x + 10 > newX ? oldPosition.x : newX,
+      });
+    } else if (e.key === "ArrowRight") {
+      const newX = oldPosition.x + 5;
+      Body.set(randomLeftSideObject, "position", {
+        ...oldPosition,
+        x: MID_POINT_X - 35 < newX ? oldPosition.x : newX,
+      });
+    } else if (e.key === "ArrowDown") {
+      Body.set(randomLeftSideObject, "position", {
+        ...oldPosition,
+        y: oldPosition.y + 5,
+      });
+    }
+  });
 
   // eslint-disable-next-line
   return <div className="playground" ref={playgroundRef} />;
