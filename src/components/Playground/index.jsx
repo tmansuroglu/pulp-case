@@ -138,6 +138,10 @@ const Playground = ({
 
     const eventCallback = () => {
       const catapultAngle = Math.abs(catapult.angle) * 100;
+      if (catapultAngle > 30) {
+        pauseGame();
+        alert("Game Over");
+      }
 
       const otherBodies = [];
       world.bodies.forEach((body) => {
@@ -149,15 +153,6 @@ const Playground = ({
           otherBodies.push(body);
         }
       });
-
-      if (
-        catapultAngle > 30 ||
-        Math.abs(reduxState.rightSideKgm - reduxState.leftSideKgm) >= 20
-      ) {
-        pauseGame();
-        alert("Game Over");
-        return;
-      }
 
       otherBodies.forEach((body) => {
         if (SAT.collides(randomLeftSideObject, body).collided) {
